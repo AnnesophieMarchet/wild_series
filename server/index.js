@@ -1,19 +1,27 @@
+// Load environment variables from .env file
+
 require("dotenv").config();
 
-const express = require("express");
+// Check database connection
+// Note: This is optional and can be removed if the database connection
+// is not required when starting the application
 
-const app = express();
+require("./database/client").checkConnection();
+
+// Import the Express application from app/config.js
+
+const app = require("./app/config");
+
+// Get the port from the environment variables
+
 const port = process.env.APP_PORT;
 
-app.get("/", (req, res) => {
-  res.send("Welcome to Wild Series coucou c' est nul  !");
-});
+// Start the server and listen on the specified port
 
-// Route par défaut pour les erreurs 404
-// app.use((req, res) => {
-//   res.status(404).send("Page not found");
-// });
-
-app.listen(port, () => {
-  console.info(`Server is running on http://localhost:${port}`);
-});
+app
+  .listen(port, () => {
+    console.info(`Server is listening on port ${port}`);
+  })
+  .on("error", (err) => {
+    console.error("Error:", err.message);
+  });
